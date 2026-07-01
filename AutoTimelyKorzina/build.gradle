@@ -1,0 +1,49 @@
+plugins {
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+}
+
+android {
+    compileSdk = 34
+    namespace = "com.autotimelykorzina"
+
+    defaultConfig {
+        minSdk = 24
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+dependencies {
+    compileOnly("com.aliucord:Aliucord:latest.release")
+    compileOnly("androidx.core:core-ktx:1.12.0")
+}
+
+tasks.register("make") {
+    dependsOn("assembleDebug")
+    doLast {
+        val pluginName = "AutoTimelyKorzina"
+        val dexFile = fileTree("${buildDir}/intermediates/dex/debug/").matching {
+            include("**/classes.dex")
+        }.singleFile
+        val manifestFile = file("src/main/assets/plugin.json")
+        val outputZip = file("${rootDir}/builds/${pluginName}.zip")
+        outputZip.parentFile.mkdirs()
+        val zip = java.util.zip.ZipOutputStream(outputZip.outputStream())
+        zip.putNextEntry(java.util.zip.ZipEntry("classes.dex"))
+        dexFile.inputStream().copyTo(zip)
+        zip.closeEntry()
+        zip.putNextEntry(java.util.zip.ZipEntry("plugin.json"))
+        manifestFile.inputStream().copyTo(zip)
+        zip.closeEntry()
+        zip.close()
+        println("✅ Плагин собран: ${outputZip.absolutePath}")
+    }
+}
