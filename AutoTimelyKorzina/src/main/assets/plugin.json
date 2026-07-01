@@ -1,0 +1,14 @@
+{
+  "name": "AutoTimelyKorzina",
+  "version": "1.0.0",
+  "description": "Каждые 12 часов отправляет /timely во все каналы с 'корзина' на всех серверах.",
+  "authors": [
+    {
+      "name": "Natu",
+      "id": 0
+    }
+  ],
+  "links": {},
+  "updateUrl": "",
+  "changelog": "1.0.0 - Первый релиз"
+}
